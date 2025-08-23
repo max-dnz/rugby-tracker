@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Rugby Notify
 
-## Getting Started
+Application web Next.js pour gérer et suivre les notifications liées au rugby.
 
-First, run the development server:
+## 🚀 Installation
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Cloner le repository
+git clone [url-du-repo]
+cd rugby-notify
+
+# Installer les dépendances
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 💻 Développement
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# Lancer le serveur de développement
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Ouvrir [http://localhost:3000](http://localhost:3000) dans votre navigateur.
 
-## Learn More
+## 🏗️ Build
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+# Créer une version de production
+npm run build
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Lancer la version de production
+npm run start
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🛠️ Technologies utilisées
 
-## Deploy on Vercel
+- **Framework**: Next.js 15.5
+- **UI**: React 19.1
+- **Styling**: Tailwind CSS
+- **State Management**: Zustand
+- **TypeScript**: Pour le typage statique
+- **Composants UI**: Radix UI
+- **Parsing CSV**: PapaParse
+- **Dates**: date-fns
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📝 Scripts disponibles
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `npm run dev` - Lance le serveur de développement
+- `npm run build` - Compile l'application pour la production
+- `npm run start` - Lance l'application en mode production
+- `npm run lint` - Vérifie le code avec ESLint
+
+## 📁 Structure du projet
+
+```
+rugby-notify/
+├── app/           # Pages et layouts Next.js
+├── components/    # Composants React réutilisables
+├── lib/          # Utilitaires et fonctions helpers
+├── public/       # Fichiers statiques
+└── styles/       # Fichiers de styles globaux
+```
