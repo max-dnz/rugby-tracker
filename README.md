@@ -6,8 +6,8 @@ Application web Next.js pour gérer et suivre les notifications liées au rugby.
 
 ```bash
 # Cloner le repository
-git clone [url-du-repo]
-cd rugby-notify
+git clone https://github.com/Remenby31/rugby-tracker
+cd rugby-tracker
 
 # Installer les dépendances
 npm install
