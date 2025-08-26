@@ -5,9 +5,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useMatchStore } from '@/lib/store';
 import { Edit2, Check, X } from 'lucide-react';
+import { eventCategories } from '@/lib/event-categories';
 
 export function ScoreBoard() {
-  const { match, setMatch, setScore } = useMatchStore();
+  const { match, setMatch, setScore, addEvent } = useMatchStore();
   const [isEditingTeams, setIsEditingTeams] = useState(false);
   const [homeTeamName, setHomeTeamName] = useState(match.homeTeam);
   const [awayTeamName, setAwayTeamName] = useState(match.awayTeam);
@@ -26,10 +27,28 @@ export function ScoreBoard() {
     setIsEditingTeams(false);
   };
 
-  const adjustScore = (team: 'home' | 'away', delta: number) => {
+
+  // Actions de points rugby (essai, transformation, pénalité, drop)
+  const pointEvents = [
+    { type: 'try', label: 'Essai', points: 5 },
+    { type: 'conversion', label: 'Transformation', points: 2 },
+    { type: 'penalty_goal', label: 'Pénalité', points: 3 },
+    { type: 'drop_goal', label: 'Drop', points: 3 },
+  ];
+
+  const handlePointEvent = (team: 'home' | 'away', event: { type: string; label: string; points: number }) => {
+    // Ajout événement chronologie
+    addEvent({
+      id: Date.now().toString(),
+  type: event.type as import("@/lib/types").EventType,
+      timestamp: new Date().toISOString(),
+      matchTime: match.currentTime,
+      team,
+      points: event.points,
+    });
+    // Mise à jour score
     const currentScore = team === 'home' ? match.homeScore : match.awayScore;
-    const newScore = Math.max(0, currentScore + delta);
-    setScore(team, newScore);
+    setScore(team, currentScore + event.points);
   };
 
   return (
@@ -77,38 +96,16 @@ export function ScoreBoard() {
           )}
           <div className="text-3xl sm:text-5xl font-bold mb-2 sm:mb-4">{match.homeScore}</div>
           <div className="flex flex-wrap gap-1 sm:gap-2 justify-center">
-            <Button
-              onClick={() => adjustScore('home', -1)}
-              variant="outline"
-              size="sm"
-              className="h-8 px-2 sm:px-3"
-            >
-              -1
-            </Button>
-            <Button
-              onClick={() => adjustScore('home', 3)}
-              variant="outline"
-              size="sm"
-              className="h-8 px-2 sm:px-3"
-            >
-              +3
-            </Button>
-            <Button
-              onClick={() => adjustScore('home', 5)}
-              variant="outline"
-              size="sm"
-              className="h-8 px-2 sm:px-3"
-            >
-              +5
-            </Button>
-            <Button
-              onClick={() => adjustScore('home', 7)}
-              variant="outline"
-              size="sm"
-              className="h-8 px-2 sm:px-3"
-            >
-              +7
-            </Button>
+            {pointEvents.map((event) => (
+              <Button
+                key={event.type}
+                onClick={() => handlePointEvent('home', event)}
+                variant="outline"
+                size="sm"
+              >
+                {event.label} (+{event.points})
+              </Button>
+            ))}
           </div>
         </div>
 
@@ -124,38 +121,16 @@ export function ScoreBoard() {
           )}
           <div className="text-3xl sm:text-5xl font-bold mb-2 sm:mb-4">{match.awayScore}</div>
           <div className="flex flex-wrap gap-1 sm:gap-2 justify-center">
-            <Button
-              onClick={() => adjustScore('away', -1)}
-              variant="outline"
-              size="sm"
-              className="h-8 px-2 sm:px-3"
-            >
-              -1
-            </Button>
-            <Button
-              onClick={() => adjustScore('away', 3)}
-              variant="outline"
-              size="sm"
-              className="h-8 px-2 sm:px-3"
-            >
-              +3
-            </Button>
-            <Button
-              onClick={() => adjustScore('away', 5)}
-              variant="outline"
-              size="sm"
-              className="h-8 px-2 sm:px-3"
-            >
-              +5
-            </Button>
-            <Button
-              onClick={() => adjustScore('away', 7)}
-              variant="outline"
-              size="sm"
-              className="h-8 px-2 sm:px-3"
-            >
-              +7
-            </Button>
+            {pointEvents.map((event) => (
+              <Button
+                key={event.type}
+                onClick={() => handlePointEvent('away', event)}
+                variant="outline"
+                size="sm"
+              >
+                {event.label} (+{event.points})
+              </Button>
+            ))}
           </div>
         </div>
       </div>

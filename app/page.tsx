@@ -4,7 +4,6 @@ import { MatchTimer } from '@/components/match/MatchTimer';
 import { ScoreBoard } from '@/components/match/ScoreBoard';
 import { EventButtons } from '@/components/match/EventButtons';
 import { EventsList } from '@/components/match/EventsList';
-import { PlayerManager } from '@/components/match/PlayerManager';
 import { Button } from '@/components/ui/button';
 import { useMatchStore } from '@/lib/store';
 import { exportMatchToCSV, exportDetailedStats } from '@/lib/csv-export';
@@ -87,7 +86,6 @@ export default function Home() {
           <div className="space-y-6 lg:col-span-1">
             <MatchTimer />
             <ScoreBoard />
-            <PlayerManager />
           </div>
 
           {/* Middle column - Event buttons */}

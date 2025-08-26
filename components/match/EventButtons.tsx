@@ -9,20 +9,14 @@ import { cn } from '@/lib/utils';
 
 export function EventButtons() {
   const { match, addEvent, setScore } = useMatchStore();
-  const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
 
   const handleEventClick = (eventType: EventType, points?: number) => {
-    if (!selectedTeam) {
-      alert("Veuillez sélectionner une équipe");
-      return;
-    }
-
     const event: MatchEvent = {
       id: Date.now().toString(),
       type: eventType,
       timestamp: new Date().toISOString(),
       matchTime: match.currentTime,
-      team: selectedTeam,
+      team: 'home',
       points,
     };
 
@@ -30,13 +24,8 @@ export function EventButtons() {
 
     // Update score if event has points
     if (points && points > 0) {
-      const currentScore = selectedTeam === 'home' ? match.homeScore : match.awayScore;
-      setScore(selectedTeam, currentScore + points);
-    }
-
-    // Reset team selection after certain events
-    if (['try', 'conversion', 'penalty_goal', 'drop_goal'].includes(eventType)) {
-      setSelectedTeam(null);
+      const currentScore = match.homeScore;
+      setScore('home', currentScore + points);
     }
   };
 
@@ -44,60 +33,46 @@ export function EventButtons() {
     <div className="bg-card rounded-lg shadow-md p-6">
       <h2 className="text-xl font-bold mb-4">Actions du match</h2>
       
-      {/* Team selection */}
-      <div className="mb-6">
-        <h3 className="text-sm font-semibold mb-2">Sélectionner l&apos;équipe:</h3>
-        <div className="flex gap-2">
-          <Button
-            onClick={() => setSelectedTeam('home')}
-            variant={selectedTeam === 'home' ? 'default' : 'outline'}
-            className="flex-1"
-          >
-            {match.homeTeam}
-          </Button>
-          <Button
-            onClick={() => setSelectedTeam('away')}
-            variant={selectedTeam === 'away' ? 'default' : 'outline'}
-            className="flex-1"
-          >
-            {match.awayTeam}
-          </Button>
-        </div>
-      </div>
 
-      {/* Event buttons organized by category */}
+
+      {/* Event buttons organized by category (hors actions de points) */}
       <div className="space-y-6">
-        {eventCategories.map((category) => (
-          <div key={category.name}>
-            <h3 className="text-sm font-semibold mb-2 text-muted-foreground">
-              {category.name}
-            </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 gap-2">
-              {category.events.map((event) => (
-                <Button
-                  key={event.type}
-                  onClick={() => handleEventClick(event.type, event.points)}
-                  variant="outline"
-                  size="sm"
-                  className={cn(
-                    "h-auto py-3 px-2 text-xs",
-                    selectedTeam && `hover:${event.color} hover:text-white`
-                  )}
-                  disabled={!selectedTeam}
-                >
-                  <div className="text-center">
-                    <div>{event.label}</div>
-                    {event.points && (
-                      <div className="text-xs text-muted-foreground mt-1">
-                        +{event.points} pts
-                      </div>
+        {eventCategories.map((category) => {
+          // On retire la catégorie Points
+          if (category.name === 'Points') return null;
+          // Filtrage des événements à masquer
+          let filteredEvents = category.events;
+          if (category.name === 'Phases de jeu') {
+            filteredEvents = filteredEvents.filter(e => e.type !== 'kick_off');
+          }
+          if (category.name === 'Fautes') {
+            filteredEvents = filteredEvents.filter(e => e.type !== 'forward_pass');
+          }
+          return (
+            <div key={category.name}>
+              <h3 className="text-sm font-semibold mb-2 text-muted-foreground">
+                {category.name}
+              </h3>
+              <div className="grid grid-cols-2 gap-2">
+                {filteredEvents.map((event) => (
+                  <Button
+                    key={event.type}
+                    onClick={() => handleEventClick(event.type, event.points)}
+                    variant="outline"
+                    size="sm"
+                    className={cn(
+                      "h-auto py-3 px-2 text-xs"
                     )}
-                  </div>
-                </Button>
-              ))}
+                  >
+                    <div className="text-center">
+                      <div>{event.label}</div>
+                    </div>
+                  </Button>
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

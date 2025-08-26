@@ -2,6 +2,50 @@ import { EventCategory } from './types';
 
 export const eventCategories: EventCategory[] = [
   {
+    name: "Défense",
+    events: [
+      { type: "tackle_success", label: "Plaquage réussi", color: "bg-green-500" },
+      { type: "tackle_miss", label: "Plaquage raté", color: "bg-red-500" },
+  { type: "turnover", label: "Ballon gratté", color: "bg-emerald-500" },
+    ],
+  },
+  {
+    name: "Attaque",
+    events: [
+      { type: "line_break", label: "Franchissement", color: "bg-cyan-500" },
+      { type: "kick", label: "Jeu au pied", color: "bg-blue-400" },
+      { type: "lost_ruck", label: "Ruck perdu", color: "bg-red-400" },
+      { type: "lost_ball", label: "Ballon perdu", color: "bg-orange-400" },
+    ],
+  },
+  {
+    name: "Fautes",
+    events: [
+      { type: "knock_on", label: "En-avant", color: "bg-orange-500" },
+      { type: "high_tackle", label: "Plaquage haut", color: "bg-red-700" },
+      { type: "offside", label: "Hors-jeu", color: "bg-red-600" },
+      { type: "ruck", label: "Ruck", color: "bg-indigo-500" },
+      { type: "penalty_conceded", label: "Pénalité obtenue", color: "bg-red-500" },
+    ],
+  },
+  {
+    name: "Phases de jeu",
+    events: [
+      { type: "lineout_won", label: "Touche gagnée", color: "bg-green-500" },
+      { type: "lineout_lost", label: "Touche perdue", color: "bg-red-500" },
+      { type: "scrum_won", label: "Mêlée gagnée", color: "bg-green-600" },
+      { type: "scrum_lost", label: "Mêlée perdue", color: "bg-red-600" },
+    ],
+  },
+  {
+  name: "Cartons",
+    events: [
+      { type: "yellow_card", label: "Carton jaune", color: "bg-yellow-500" },
+      { type: "red_card", label: "Carton rouge", color: "bg-red-800" },
+      { type: "white_card", label: "Carton blanc", color: "bg-gray-200 text-black" },
+    ],
+  },
+  {
     name: "Points",
     events: [
       { type: "try", label: "Essai", points: 5, color: "bg-green-500" },
@@ -10,50 +54,6 @@ export const eventCategories: EventCategory[] = [
       { type: "drop_goal", label: "Drop", points: 3, color: "bg-blue-600" },
       { type: "penalty_miss", label: "Pénalité ratée", color: "bg-gray-500" },
       { type: "conversion_miss", label: "Transformation ratée", color: "bg-gray-600" },
-    ],
-  },
-  {
-    name: "Phases de jeu",
-    events: [
-      { type: "scrum", label: "Mêlée", color: "bg-purple-500" },
-      { type: "lineout", label: "Touche", color: "bg-purple-600" },
-      { type: "ruck", label: "Ruck", color: "bg-indigo-500" },
-      { type: "maul", label: "Maul", color: "bg-indigo-600" },
-      { type: "kick_off", label: "Coup d'envoi", color: "bg-cyan-500" },
-    ],
-  },
-  {
-    name: "Fautes",
-    events: [
-      { type: "knock_on", label: "En-avant", color: "bg-orange-500" },
-      { type: "forward_pass", label: "Passe en avant", color: "bg-orange-600" },
-      { type: "penalty_conceded", label: "Pénalité concédée", color: "bg-red-500" },
-      { type: "offside", label: "Hors-jeu", color: "bg-red-600" },
-      { type: "high_tackle", label: "Plaquage haut", color: "bg-red-700" },
-    ],
-  },
-  {
-    name: "Cartons & Remplacements",
-    events: [
-      { type: "yellow_card", label: "Carton jaune", color: "bg-yellow-500" },
-      { type: "red_card", label: "Carton rouge", color: "bg-red-800" },
-      { type: "substitution", label: "Remplacement", color: "bg-teal-500" },
-      { type: "injury", label: "Blessure", color: "bg-pink-500" },
-      { type: "time_out", label: "Temps mort", color: "bg-gray-700" },
-    ],
-  },
-  {
-    name: "Actions défensives",
-    events: [
-      { type: "tackle", label: "Plaquage", color: "bg-slate-500" },
-      { type: "turnover", label: "Turnover", color: "bg-emerald-500" },
-    ],
-  },
-  {
-    name: "Gestion du match",
-    events: [
-      { type: "half_time", label: "Mi-temps", color: "bg-zinc-500" },
-      { type: "full_time", label: "Fin du match", color: "bg-zinc-700" },
     ],
   },
 ];

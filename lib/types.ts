@@ -23,7 +23,18 @@ export type EventType =
   | "maul"
   | "offside"
   | "high_tackle"
-  | "time_out";
+  | "time_out"
+  | "lineout_won"
+  | "lineout_lost"
+  | "scrum_won"
+  | "scrum_lost"
+  | "white_card"
+  | "tackle_success"
+  | "tackle_miss"
+  | "line_break"
+  | "kick"
+  | "lost_ruck"
+  | "lost_ball";
 
 export type Team = "home" | "away";
 

@@ -3,15 +3,23 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useMatchStore } from '@/lib/store';
+import { EventType } from '@/lib/types';
 import { Play, Pause, RotateCcw, Flag } from 'lucide-react';
 
 export function MatchTimer() {
-  const { match, startMatch, pauseMatch, resumeMatch, updateMatchTime, setHalf, endMatch } = useMatchStore();
+  const { match, startMatch, pauseMatch, resumeMatch, updateMatchTime, setHalf, endMatch, addEvent } = useMatchStore();
   const [displayTime, setDisplayTime] = useState(0);
+  const [realTime, setRealTime] = useState<Date | null>(null);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
-
+    setMounted(true);
+    let realTimeInterval: NodeJS.Timeout | undefined;
+    if (mounted) {
+      setRealTime(new Date());
+      realTimeInterval = setInterval(() => setRealTime(new Date()), 1000);
+    }
+    let interval: NodeJS.Timeout | undefined;
     if (match.isRunning && !match.isPaused) {
       interval = setInterval(() => {
         const newTime = match.currentTime + 1;
@@ -21,11 +29,12 @@ export function MatchTimer() {
     } else {
       setDisplayTime(match.currentTime);
     }
-
     return () => {
       if (interval) clearInterval(interval);
+      if (realTimeInterval) clearInterval(realTimeInterval);
     };
-  }, [match.isRunning, match.isPaused, match.currentTime, updateMatchTime]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [match.isRunning, match.isPaused, match.currentTime, updateMatchTime, mounted]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -43,17 +52,30 @@ export function MatchTimer() {
     }
   };
 
-  const handleReset = () => {
-    updateMatchTime(0);
-    setDisplayTime(0);
-  };
+
 
   const handleHalfTime = () => {
     if (match.half === 1) {
       setHalf(2);
       pauseMatch();
+      updateMatchTime(2400); // 40 minutes en secondes
+      setDisplayTime(2400);
+      addEvent({
+        id: Date.now().toString(),
+        type: 'Mi-temps' as EventType,
+        timestamp: new Date().toISOString(),
+        matchTime: match.currentTime,
+        team: undefined,
+      });
     } else {
       endMatch();
+      addEvent({
+        id: Date.now().toString(),
+        type: 'Fin du match' as EventType,
+        timestamp: new Date().toISOString(),
+        matchTime: match.currentTime,
+        team: undefined,
+      });
     }
   };
 
@@ -66,6 +88,11 @@ export function MatchTimer() {
         <div className="text-5xl font-bold font-mono mb-4">
           {formatTime(displayTime)}
         </div>
+        {mounted && realTime && (
+          <div className="text-xs text-muted-foreground mb-2">
+            Heure réelle : {realTime.toLocaleTimeString()}
+          </div>
+        )}
         <div className="flex flex-wrap gap-2 justify-center">
           <Button
             onClick={handleStartPause}
@@ -84,14 +111,6 @@ export function MatchTimer() {
                 {!match.startTime ? 'Démarrer' : 'Reprendre'}
               </>
             )}
-          </Button>
-          <Button
-            onClick={handleReset}
-            variant="outline"
-            size="default"
-          >
-            <RotateCcw className="mr-2 h-4 w-4" />
-            <span className="hidden sm:inline">Reset</span>
           </Button>
           <Button
             onClick={handleHalfTime}

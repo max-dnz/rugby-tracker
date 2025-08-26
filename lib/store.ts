@@ -23,8 +23,8 @@ interface MatchStore {
 
 const initialMatch: Match = {
   id: '',
-  homeTeam: 'Équipe Domicile',
-  awayTeam: 'Équipe Extérieur',
+  homeTeam: 'ROC HC',
+  awayTeam: 'Adversaire',
   homeScore: 0,
   awayScore: 0,
   startTime: null,
