@@ -4,6 +4,7 @@ import { MatchTimer } from '@/components/match/MatchTimer';
 import { ScoreBoard } from '@/components/match/ScoreBoard';
 import { EventButtons } from '@/components/match/EventButtons';
 import { EventsList } from '@/components/match/EventsList';
+import { LiveStats } from '@/components/match/LiveStats';
 import { Button } from '@/components/ui/button';
 import { useMatchStore } from '@/lib/store';
 import { exportMatchToCSV, exportDetailedStats } from '@/lib/csv-export';
@@ -93,8 +94,9 @@ export default function Home() {
             <EventButtons />
           </div>
 
-          {/* Right column - Events list */}
+          {/* Right column - Live stats and Events list */}
           <div className="lg:col-span-1">
+            <LiveStats />
             <EventsList />
           </div>
         </div>
