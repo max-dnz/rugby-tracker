@@ -33,8 +33,8 @@ export const eventCategories: EventCategory[] = [
     events: [
       { type: "lineout_won", label: "Touche gagnée", color: "bg-green-500" },
       { type: "lineout_lost", label: "Touche perdue", color: "bg-red-500" },
-      { type: "scrum_won", label: "Mêlée gagnée", color: "bg-green-600" },
-      { type: "scrum_lost", label: "Mêlée perdue", color: "bg-red-600" },
+  { type: "kick_miss", label: "Coup de pied raté", color: "bg-gray-500" },
+  { type: "penalty_miss", label: "Pénalité manquée", color: "bg-gray-600" },
     ],
   },
   {

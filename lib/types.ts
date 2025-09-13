@@ -34,7 +34,8 @@ export type EventType =
   | "line_break"
   | "kick"
   | "lost_ruck"
-  | "lost_ball";
+  | "lost_ball"
+  | "kick_miss";
 
 export type Team = "home" | "away";
 

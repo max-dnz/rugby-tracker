@@ -18,18 +18,29 @@ export function LiveStats() {
   // Rucks perdus
   const lostRucks = match.events.filter(e => e.type === 'lost_ruck' && e.team === 'home').length;
 
-  // Pénalités concédées (total)
-  const penalties = match.events.filter(e => e.type === 'penalty_conceded' && e.team === 'home').length;
-  // Détail des types de pénalités (exemple : hors-jeu, ruck, plaquage haut)
+  // Pénalités concédées : somme des actions ruck, plaquage haut et hors-jeu
   const penaltyOffside = match.events.filter(e => e.type === 'offside' && e.team === 'home').length;
   const penaltyRuck = match.events.filter(e => e.type === 'ruck' && e.team === 'home').length;
   const penaltyHighTackle = match.events.filter(e => e.type === 'high_tackle' && e.team === 'home').length;
+  const penalties = penaltyOffside + penaltyRuck + penaltyHighTackle;
 
-  // Pénalités obtenues
-  const penaltiesWon = match.events.filter(e => e.type === 'penalty_conceded' && e.team === 'away').length;
+  // Pénalités obtenues : nombre d'appuis sur le bouton pénalité obtenue (team 'home')
+  const penaltiesWon = match.events.filter(e => e.type === 'penalty_conceded' && e.team === 'home').length;
 
   // En-avant
   const knockOns = match.events.filter(e => e.type === 'knock_on' && e.team === 'home').length;
+
+  // Calculs coups de pied
+  // Pourcentage de réussite au pied : transformations + pénalités réussies / (transformations + pénalités réussies + pénalités manquées)
+  const penaltyGoals = match.events.filter(e => e.type === 'penalty_goal' && e.team === 'home').length;
+  const conversions = match.events.filter(e => e.type === 'conversion' && e.team === 'home').length;
+  const penaltyMisses = match.events.filter(e => e.type === 'penalty_miss' && e.team === 'home').length;
+  const totalSuccessfulKicks = penaltyGoals + conversions;
+  const totalKicks = totalSuccessfulKicks + penaltyMisses;
+  const kickSuccessPct = totalKicks > 0 ? Math.round((totalSuccessfulKicks / totalKicks) * 100) : 0;
+
+  // Coups de pied manqués : nombre d'événements 'kick_miss'
+  const kickMisses = match.events.filter(e => e.type === 'kick_miss' && e.team === 'home').length;
 
   return (
     <div className="mb-4 p-4 rounded-lg border bg-muted">
@@ -39,7 +50,10 @@ export function LiveStats() {
         <span className="font-semibold">% Plaquages réussis :</span> {tacklePct}%
         <span className="pl-2 text-sm text-muted-foreground">({tacklesSuccess} réussis / {tacklesMiss} ratés)</span>
       </div>
+      {/* ...autres stats... */}
+  {/* ...autres stats... */}
       {/* Ballons perdus/gagnés */}
+      <div className="mt-2" />
       <div>
         <span className="font-semibold">Ballons perdus :</span> {lostBalls}
       </div>
@@ -49,6 +63,14 @@ export function LiveStats() {
       {/* Rucks perdus */}
       <div>
         <span className="font-semibold">Rucks perdus :</span> {lostRucks}
+      </div>
+      {/* Franchissement */}
+      <div>
+        <span className="font-semibold">Franchissements :</span> {match.events.filter(e => e.type === 'line_break' && e.team === 'home').length}
+      </div>
+      {/* Jeu au pied */}
+      <div>
+        <span className="font-semibold">Jeu au pied :</span> {match.events.filter(e => e.type === 'kick' && e.team === 'home').length}
       </div>
       {/* Pénalités */}
       <div className="mt-2">
@@ -68,21 +90,34 @@ export function LiveStats() {
         <span className="font-semibold">En-avant :</span> {knockOns}
       </div>
       {/* Cartons */}
-      <div className="mt-2">
+      <div className="mt-4">
         <span className="font-semibold">Cartons reçus :</span>
         <span className="pl-2">Blanc : {match.events.filter(e => e.type === 'white_card' && e.team === 'home').length}</span>
         <span className="pl-2">Jaune : {match.events.filter(e => e.type === 'yellow_card' && e.team === 'home').length}</span>
         <span className="pl-2">Rouge : {match.events.filter(e => e.type === 'red_card' && e.team === 'home').length}</span>
       </div>
       {/* Touches */}
-      <div className="mt-2">
-        <span className="font-semibold">Touches gagnées / perdues :</span>
-        <span className="pl-2">{match.events.filter(e => e.type === 'lineout_won' && e.team === 'home').length} / {match.events.filter(e => e.type === 'lineout_lost' && e.team === 'home').length}</span>
+      <div className="mt-4">
+        {(() => {
+          const lineoutWon = match.events.filter(e => e.type === 'lineout_won' && e.team === 'home').length;
+          const lineoutLost = match.events.filter(e => e.type === 'lineout_lost' && e.team === 'home').length;
+          const totalLineouts = lineoutWon + lineoutLost;
+          const lineoutPct = totalLineouts > 0 ? Math.round((lineoutWon / totalLineouts) * 100) : 0;
+          return (
+            <>
+              <span className="font-semibold">% Réussite aux touches :</span> {lineoutPct}%
+              <span className="pl-2 text-sm text-muted-foreground">({lineoutWon} gagnées / {totalLineouts} jouées)</span>
+            </>
+          );
+        })()}
       </div>
-      {/* Mêlées */}
+      {/* Statistiques pied tout en bas */}
+      <div className="mt-4">
+        <span className="font-semibold">% Réussite au pied :</span> {kickSuccessPct}%
+        <span className="pl-2 text-sm text-muted-foreground">({totalSuccessfulKicks} réussis / {totalKicks} tentés)</span>
+      </div>
       <div>
-        <span className="font-semibold">Mêlées gagnées / perdues :</span>
-        <span className="pl-2">{match.events.filter(e => e.type === 'scrum_won' && e.team === 'home').length} / {match.events.filter(e => e.type === 'scrum_lost' && e.team === 'home').length}</span>
+        <span className="font-semibold">Coups de pied manqués :</span> {kickMisses}
       </div>
     </div>
   );
