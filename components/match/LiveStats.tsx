@@ -30,17 +30,19 @@ export function LiveStats() {
   // En-avant
   const knockOns = match.events.filter(e => e.type === 'knock_on' && e.team === 'home').length;
 
-  // Calculs coups de pied
-  // Pourcentage de réussite au pied : transformations + pénalités réussies / (transformations + pénalités réussies + pénalités manquées)
-  const penaltyGoals = match.events.filter(e => e.type === 'penalty_goal' && e.team === 'home').length;
-  const conversions = match.events.filter(e => e.type === 'conversion' && e.team === 'home').length;
-  const penaltyMisses = match.events.filter(e => e.type === 'penalty_miss' && e.team === 'home').length;
-  const totalSuccessfulKicks = penaltyGoals + conversions;
-  const totalKicks = totalSuccessfulKicks + penaltyMisses;
-  const kickSuccessPct = totalKicks > 0 ? Math.round((totalSuccessfulKicks / totalKicks) * 100) : 0;
-
-  // Coups de pied manqués : nombre d'événements 'kick_miss'
-  const kickMisses = match.events.filter(e => e.type === 'kick_miss' && e.team === 'home').length;
+  // Calculs coups de pied pour chaque équipe
+  function getKickStats(team: 'home' | 'away') {
+    const penaltyGoals = match.events.filter(e => e.type === 'penalty_goal' && e.team === team).length;
+    const conversions = match.events.filter(e => e.type === 'conversion' && e.team === team).length;
+    const penaltyMisses = match.events.filter(e => e.type === 'penalty_miss' && e.team === team).length;
+    const totalSuccessfulKicks = penaltyGoals + conversions;
+    const totalKicks = totalSuccessfulKicks + penaltyMisses;
+    const kickSuccessPct = totalKicks > 0 ? Math.round((totalSuccessfulKicks / totalKicks) * 100) : 0;
+    const kickMisses = match.events.filter(e => e.type === 'kick_miss' && e.team === team).length;
+    return { kickSuccessPct, totalSuccessfulKicks, totalKicks, kickMisses };
+  }
+  const homeKickStats = getKickStats('home');
+  const awayKickStats = getKickStats('away');
 
   return (
     <div className="mb-4 p-4 rounded-lg border bg-muted">
@@ -71,6 +73,47 @@ export function LiveStats() {
       {/* Jeu au pied */}
       <div>
         <span className="font-semibold">Jeu au pied :</span> {match.events.filter(e => e.type === 'kick' && e.team === 'home').length}
+      </div>
+
+      {/* Statistiques Zone de marque */}
+      <div className="mt-2">
+        <span className="font-semibold">Entrées dans les 22 :</span> {match.events.filter(e => e.type === 'entry_22' && e.team === 'home').length}
+      </div>
+      <div>
+        {(() => {
+          const entries = match.events.filter(e => e.type === 'entry_22' && e.team === 'home').length;
+          const points = match.events.filter(e => e.type === 'zone_points' && e.team === 'home').length;
+          const lost = match.events.filter(e => e.type === 'zone_lost_ball' && e.team === 'home').length;
+          const percent = entries > 0 ? Math.round((points / entries) * 100) : 0;
+          // Calcul moyenne phase de jeu entre entrées dans les 22
+          const events = match.events.filter(e => e.team === 'home');
+          const entryIndexes: number[] = [];
+          events.forEach((e, i) => {
+            if (e.type === 'entry_22') entryIndexes.push(i);
+          });
+          const phaseCounts: number[] = [];
+          for (let i = 0; i < entryIndexes.length - 1; i++) {
+            const start = entryIndexes[i];
+            const end = entryIndexes[i + 1];
+            const phases = events.slice(start + 1, end).filter(e => e.type === 'phase_play').length;
+            phaseCounts.push(phases);
+          }
+          // Après la dernière entrée jusqu'à la fin du match
+          if (entryIndexes.length > 0) {
+            const lastEntry = entryIndexes[entryIndexes.length - 1];
+            const phases = events.slice(lastEntry + 1).filter(e => e.type === 'phase_play').length;
+            phaseCounts.push(phases);
+          }
+          const avgPhasePlay = phaseCounts.length > 0 ? (phaseCounts.reduce((a, b) => a + b, 0) / phaseCounts.length) : 0;
+          return (
+            <>
+              <span className="font-semibold">Efficacité 22m :</span> {percent}%
+              <span className="pl-2 text-sm text-muted-foreground">({points} / {lost})</span>
+              <br />
+              <span className="font-semibold">Moyenne phases de jeu entre entrées 22m :</span> {avgPhasePlay.toFixed(2)}
+            </>
+          );
+        })()}
       </div>
       {/* Pénalités */}
       <div className="mt-2">
@@ -111,13 +154,17 @@ export function LiveStats() {
           );
         })()}
       </div>
-      {/* Statistiques pied tout en bas */}
+      {/* Statistiques pied tout en bas pour chaque équipe */}
       <div className="mt-4">
-        <span className="font-semibold">% Réussite au pied :</span> {kickSuccessPct}%
-        <span className="pl-2 text-sm text-muted-foreground">({totalSuccessfulKicks} réussis / {totalKicks} tentés)</span>
+        <span className="font-semibold">% Réussite Pied ROC HC :</span> {homeKickStats.kickSuccessPct}%
+        <span className="pl-2 text-sm text-muted-foreground">({homeKickStats.totalSuccessfulKicks} réussis / {homeKickStats.totalKicks} tentés)</span>
       </div>
       <div>
-        <span className="font-semibold">Coups de pied manqués :</span> {kickMisses}
+        <span className="font-semibold">Coups de pied manqués ROC HC :</span> {homeKickStats.kickMisses}
+      </div>
+      <div className="mt-4">
+        <span className="font-semibold">% Réussite Pied Adversaire :</span> {awayKickStats.kickSuccessPct}%
+        <span className="pl-2 text-sm text-muted-foreground">({awayKickStats.totalSuccessfulKicks} réussis / {awayKickStats.totalKicks} tentés)</span>
       </div>
     </div>
   );

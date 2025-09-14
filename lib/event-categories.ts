@@ -19,6 +19,15 @@ export const eventCategories: EventCategory[] = [
     ],
   },
   {
+    name: "Zone de marque",
+    events: [
+      { type: "entry_22", label: "Entrée dans les 22", color: "bg-blue-300" },
+      { type: "phase_play", label: "Phase de jeu", color: "bg-indigo-400" },
+      { type: "zone_points", label: "Points marqués", color: "bg-green-400" },
+      { type: "zone_lost_ball", label: "Ballon perdu", color: "bg-red-400" },
+    ],
+  },
+  {
     name: "Fautes",
     events: [
       { type: "knock_on", label: "En-avant", color: "bg-orange-500" },
@@ -34,7 +43,6 @@ export const eventCategories: EventCategory[] = [
       { type: "lineout_won", label: "Touche gagnée", color: "bg-green-500" },
       { type: "lineout_lost", label: "Touche perdue", color: "bg-red-500" },
   { type: "kick_miss", label: "Coup de pied raté", color: "bg-gray-500" },
-  { type: "penalty_miss", label: "Pénalité manquée", color: "bg-gray-600" },
     ],
   },
   {

@@ -36,6 +36,17 @@ export function ScoreBoard() {
     { type: 'drop_goal', label: 'Drop', points: 3 },
   ];
 
+  // Ajout bouton pénalité manquée
+  const handlePenaltyMiss = (team: 'home' | 'away') => {
+    addEvent({
+      id: Date.now().toString(),
+      type: 'penalty_miss',
+      timestamp: new Date().toISOString(),
+      matchTime: match.currentTime,
+      team,
+    });
+  };
+
   const handlePointEvent = (team: 'home' | 'away', event: { type: string; label: string; points: number }) => {
     // Ajout événement chronologie
     addEvent({
@@ -106,6 +117,13 @@ export function ScoreBoard() {
                 {event.label} (+{event.points})
               </Button>
             ))}
+            <Button
+              onClick={() => handlePenaltyMiss('home')}
+              variant="outline"
+              size="sm"
+            >
+              Pénalité manquée
+            </Button>
           </div>
         </div>
 
@@ -131,6 +149,13 @@ export function ScoreBoard() {
                 {event.label} (+{event.points})
               </Button>
             ))}
+            <Button
+              onClick={() => handlePenaltyMiss('away')}
+              variant="outline"
+              size="sm"
+            >
+              Pénalité manquée
+            </Button>
           </div>
         </div>
       </div>
