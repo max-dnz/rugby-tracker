@@ -1,3 +1,8 @@
+export interface Player {
+  numero: number;
+  poste: string;
+  nom: string;
+}
 export type EventType = 
   | "try"
   | "conversion"
@@ -43,13 +48,7 @@ export type EventType =
 
 export type Team = "home" | "away";
 
-export interface Player {
-  id: string;
-  name: string;
-  number: number;
-  position: string;
-  team: Team;
-}
+// (supprimé, doublon inutile)
 
 export interface MatchEvent {
   id: string;

@@ -19,7 +19,6 @@ export function EventButtons() {
       type: eventType,
       timestamp: new Date().toISOString(),
       matchTime: match.currentTime,
-      team: 'home',
       points,
     };
 
@@ -92,11 +91,9 @@ export function EventButtonsIndividuel() {
   const handleSelectJoueur = (joueur: { numero: number; poste: string; nom: string }) => {
     if (!pendingEvent) return;
     const player: Player = {
-      id: `home-${joueur.numero}`,
-      name: joueur.nom || joueur.poste || `#${joueur.numero}`,
-      number: joueur.numero,
-      position: joueur.poste,
-      team: 'home',
+      numero: joueur.numero,
+      poste: joueur.poste,
+      nom: joueur.nom,
     };
     const event: MatchEvent = {
       id: Date.now().toString(),

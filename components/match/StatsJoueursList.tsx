@@ -1,9 +1,10 @@
 import React from 'react';
+import type { Player } from '@/lib/types';
 import { useMatchStore } from '@/lib/store';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button as UIButton } from '@/components/ui/button';
 
-export function StatsJoueursList({ titulaires, remplacants }: { titulaires: any[]; remplacants: any[] }) {
+export function StatsJoueursList({ titulaires, remplacants }: { titulaires: Player[]; remplacants: Player[] }) {
   const { match } = useMatchStore();
   const [open, setOpen] = React.useState(false);
   const [selected, setSelected] = React.useState<number|null>(null);
@@ -14,7 +15,7 @@ export function StatsJoueursList({ titulaires, remplacants }: { titulaires: any[
   // Trouve le joueur sélectionné
   const joueur = joueurs.find(j => j.numero === selected);
   // Stats du joueur sélectionné
-  const playerEvents = match.events.filter(e => e.player && e.player.number === selected);
+  const playerEvents = match.events.filter(e => e.player && e.player.numero === selected);
   const statsMap: Record<string, number> = {};
   playerEvents.forEach(e => {
     statsMap[e.type] = (statsMap[e.type] || 0) + 1;

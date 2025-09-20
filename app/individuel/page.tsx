@@ -2,6 +2,7 @@
 import { Composition } from '@/components/match/Composition';
 import { MatchTimer } from '@/components/match/MatchTimer';
 import React, { useState, useEffect } from 'react';
+import type { Player } from '@/lib/types';
 import { useMatchStore } from '@/lib/store';
 import { RefreshCw, Share2, Copy } from 'lucide-react';
 import * as LZString from 'lz-string';
@@ -28,7 +29,7 @@ export default function IndividuelPage() {
   const [shortError, setShortError] = useState<string|null>(null);
   const { resetMatch } = useMatchStore();
   // État partagé pour la composition
-  const [titulaires, setTitulaires] = useState(() => [
+  const [titulaires, setTitulaires] = useState<Player[]>(() => [
     { numero: 1, poste: "Pilier gauche", nom: "" },
     { numero: 2, poste: "Talonneur", nom: "" },
     { numero: 3, poste: "Pilier droit", nom: "" },
@@ -45,7 +46,7 @@ export default function IndividuelPage() {
     { numero: 14, poste: "Ailier droit", nom: "" },
     { numero: 15, poste: "Arrière", nom: "" },
   ]);
-  const [remplacants, setRemplacants] = useState(() => [
+  const [remplacants, setRemplacants] = useState<Player[]>(() => [
     { numero: 16, poste: "Remplaçant 1", nom: "" },
     { numero: 17, poste: "Remplaçant 2", nom: "" },
     { numero: 18, poste: "Remplaçant 3", nom: "" },

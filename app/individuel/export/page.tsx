@@ -1,13 +1,14 @@
 "use client";
 import { StatsJoueursList } from '@/components/match/StatsJoueursList';
+import type { Player } from '@/lib/types';
 import { useSearchParams } from 'next/navigation';
 import React from 'react';
 
 export default function ExportIndividuelPage() {
   // Récupère la composition et les noms depuis les paramètres d'URL (ou localStorage fallback)
   const searchParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
-  let titulaires = [];
-  let remplacants = [];
+  let titulaires: Player[] = [];
+  let remplacants: Player[] = [];
   if (typeof window !== 'undefined') {
     try {
       titulaires = JSON.parse(searchParams?.get('titulaires') || localStorage.getItem('titulaires') || '[]');
