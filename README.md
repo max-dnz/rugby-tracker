@@ -1,3 +1,4 @@
+# Version 1.0.0 : Mode individuel et collectif
 # Rugby Notify
 
 Application web Next.js pour gérer et suivre les notifications liées au rugby.
