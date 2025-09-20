@@ -3,7 +3,17 @@ import { Composition } from '@/components/match/Composition';
 import { MatchTimer } from '@/components/match/MatchTimer';
 import React, { useState, useEffect } from 'react';
 import { useMatchStore } from '@/lib/store';
-import { RefreshCw } from 'lucide-react';
+import { RefreshCw, Share2, Copy } from 'lucide-react';
+import * as LZString from 'lz-string';
+// Pour l'URL export courte
+function encodeExportData(titulaires: any[], remplacants: any[]) {
+  const data = JSON.stringify({ t: titulaires, r: remplacants });
+  if (typeof window !== 'undefined') {
+    // LZ-string compresse puis encode en base64 (URL safe)
+    return LZString.compressToEncodedURIComponent(data);
+  }
+  return '';
+}
 import { Button } from '@/components/ui/button';
 import { EventButtonsIndividuel } from '@/components/match/EventButtons';
 import { StatsJoueursList } from '@/components/match/StatsJoueursList';
@@ -11,6 +21,11 @@ import { EventsList } from '@/components/match/EventsList';
 
 
 export default function IndividuelPage() {
+  const [copied, setCopied] = useState(false);
+  const [showExportLink, setShowExportLink] = useState(false);
+  const [shortUrl, setShortUrl] = useState<string|null>(null);
+  const [loadingShort, setLoadingShort] = useState(false);
+  const [shortError, setShortError] = useState<string|null>(null);
   const { resetMatch } = useMatchStore();
   // État partagé pour la composition
   const [titulaires, setTitulaires] = useState(() => [
@@ -66,21 +81,84 @@ export default function IndividuelPage() {
                 Enregistrez vos statistiques personnelles en temps réel
               </p>
             </div>
-            <div>
-              <Button
-                onClick={handleResetMatch}
-                variant="destructive"
-                size="sm"
-                className="flex-1 sm:flex-initial"
-              >
-                <RefreshCw className="mr-2 h-4 w-4" />
-                <span className="hidden sm:inline">Nouveau</span> Match
-              </Button>
+            <div className="flex flex-col gap-2 items-end">
+              {/* Génération du lien export court */}
+              <div className="flex gap-2 mt-2">
+                <Button
+                  onClick={handleResetMatch}
+                  variant="destructive"
+                  size="sm"
+                  className="flex-1 sm:flex-initial"
+                >
+                  <RefreshCw className="mr-2 h-4 w-4" />
+                  <span className="hidden sm:inline">Nouveau</span> Match
+                </Button>
+                <Button
+                  onClick={async () => {
+                    setShowExportLink(v => !v);
+                    if (!showExportLink) {
+                      setShortUrl(null);
+                      setShortError(null);
+                      setLoadingShort(true);
+                      const exportCode = encodeExportData(titulaires, remplacants);
+                      const exportUrl = `${typeof window !== 'undefined' ? window.location.origin : ''}/individuel/export?data=${exportCode}`;
+                      try {
+                        const resp = await fetch(`https://is.gd/create.php?format=simple&url=${encodeURIComponent(exportUrl)}`);
+                        const txt = await resp.text();
+                        if (txt.startsWith('Error')) {
+                          setShortError('Erreur lors de la génération du lien court');
+                        } else {
+                          setShortUrl(txt);
+                        }
+                      } catch {
+                        setShortError('Erreur réseau');
+                      } finally {
+                        setLoadingShort(false);
+                      }
+                    }
+                  }}
+                  variant="secondary"
+                  size="sm"
+                  className="flex-1 sm:flex-initial"
+                  title="Afficher le lien d'export (page partageable)"
+                >
+                  <Share2 className="mr-2 h-4 w-4" />
+                  Export
+                </Button>
+                {showExportLink && (() => {
+                  const exportCode = encodeExportData(titulaires, remplacants);
+                  const exportUrl = `${typeof window !== 'undefined' ? window.location.origin : ''}/individuel/export?data=${exportCode}`;
+                  return (
+                    <div className="w-full mt-2">
+                      {loadingShort && <span className="text-xs text-muted-foreground">Génération du lien court…</span>}
+                      {shortError && (
+                        <>
+                          <span className="text-xs text-red-600">{shortError}</span>
+                          <input
+                            type="text"
+                            value={exportUrl}
+                            readOnly
+                            className="w-full px-2 py-1 border rounded text-xs bg-muted mt-1"
+                            onFocus={e => e.target.select()}
+                          />
+                        </>
+                      )}
+                      {shortUrl && !shortError && (
+                        <input
+                          type="text"
+                          value={shortUrl}
+                          readOnly
+                          className="w-full px-2 py-1 border rounded text-xs bg-muted"
+                          onFocus={e => e.target.select()}
+                        />
+                      )}
+                    </div>
+                  );
+                })()}
+              </div>
             </div>
           </div>
         </div>
-
-        {/* Main grid layout */}
         <div className="grid gap-6 grid-cols-1 lg:grid-cols-3">
           {/* Left column - Timer et Composition (éditable) */}
           <div className="space-y-6 lg:col-span-1">
@@ -92,12 +170,10 @@ export default function IndividuelPage() {
               setRemplacants={setRemplacants}
             />
           </div>
-
           {/* Middle column - Event buttons */}
           <div className="lg:col-span-1">
             <EventButtonsIndividuel />
           </div>
-
           {/* Right column - Statistiques et Chronologie */}
           <div className="lg:col-span-1 flex flex-col gap-6">
             <div>
@@ -106,9 +182,7 @@ export default function IndividuelPage() {
             </div>
             <EventsList />
           </div>
-// ...existing code...
         </div>
-
         {/* Footer */}
         <div className="mt-8 text-center text-sm text-muted-foreground">
           <p>
