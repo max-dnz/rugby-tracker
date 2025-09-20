@@ -1,11 +1,12 @@
 "use client";
 import { Composition } from '@/components/match/Composition';
 import { MatchTimer } from '@/components/match/MatchTimer';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useMatchStore } from '@/lib/store';
 import { RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { EventButtons } from '@/components/match/EventButtons';
+import { EventButtonsIndividuel } from '@/components/match/EventButtons';
+import { StatsJoueursList } from '@/components/match/StatsJoueursList';
 import { EventsList } from '@/components/match/EventsList';
 
 
@@ -38,6 +39,14 @@ export default function IndividuelPage() {
     { numero: 21, poste: "Remplaçant 6", nom: "" },
     { numero: 22, poste: "Remplaçant 7", nom: "" },
   ]);
+
+  // Synchronise la composition dans le localStorage pour EventButtonsIndividuel
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('titulaires', JSON.stringify(titulaires));
+      localStorage.setItem('remplacants', JSON.stringify(remplacants));
+    }
+  }, [titulaires, remplacants]);
 
   const handleResetMatch = () => {
     if (confirm('Êtes-vous sûr de vouloir réinitialiser le match ? Toutes les données seront perdues.')) {
@@ -86,18 +95,18 @@ export default function IndividuelPage() {
 
           {/* Middle column - Event buttons */}
           <div className="lg:col-span-1">
-            <EventButtons />
+            <EventButtonsIndividuel />
           </div>
 
-          {/* Right column - Statistiques (affichage composition non éditable) */}
-          <div className="lg:col-span-1">
-            <div className="mb-4 text-xl font-bold">Statistiques</div>
-            <Composition
-              titulaires={titulaires}
-              remplacants={remplacants}
-              edit={false}
-            />
+          {/* Right column - Statistiques et Chronologie */}
+          <div className="lg:col-span-1 flex flex-col gap-6">
+            <div>
+              <div className="mb-4 text-xl font-bold">Statistiques</div>
+              <StatsJoueursList titulaires={titulaires} remplacants={remplacants} />
+            </div>
+            <EventsList />
           </div>
+// ...existing code...
         </div>
 
         {/* Footer */}

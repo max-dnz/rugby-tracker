@@ -47,7 +47,15 @@ export function EventsList() {
           <div className="space-y-2">
             {sortedEvents.map((event) => {
               const eventDetails = getEventDetails(event.type);
-              const teamName = event.team === 'home' ? match.homeTeam : match.awayTeam;
+              // Affiche numéro et nom du joueur si dispo, sinon nom équipe
+              let playerLabel = '';
+              if (event.player) {
+                playerLabel = `#${event.player.number}`;
+                if (event.player.name && event.player.name !== event.player.position && event.player.name !== `#${event.player.number}`) {
+                  playerLabel += ` - ${event.player.name}`;
+                }
+              }
+              const teamName = playerLabel || (event.team === 'home' ? match.homeTeam : match.awayTeam);
               
               return (
                 <div
@@ -72,7 +80,7 @@ export function EventsList() {
                       </div>
                       <div className="text-xs sm:text-sm text-muted-foreground truncate">
                         {teamName}
-                        {event.points && ` (+${event.points} pts)`}
+                        {event.points && event.type !== 'try' && ` (+${event.points} pts)`}
                       </div>
                     </div>
                   </div>

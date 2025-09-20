@@ -1,4 +1,8 @@
 import React, { useState } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
+import { Button } from '../ui/button';
+import { useMatchStore } from '@/lib/store';
+import { PlayerStatsDialog } from '../ui/player-stats-dialog';
 
 const defaultTitulaires = [
   { numero: 1, poste: "Pilier gauche", nom: "" },
@@ -165,6 +169,7 @@ function PlayerCircle({ numero, nom, edit, onNomChange }: {
   edit?: boolean;
   onNomChange?: (v: string) => void;
 }) {
+  // Dans l'onglet composition (edit ou non), jamais de bouton stats
   return (
     <div className="flex flex-col items-center">
       <div className="w-10 h-10 rounded-full bg-white border-2 border-green-900 flex items-center justify-center font-bold text-green-900 mb-1">
@@ -178,7 +183,7 @@ function PlayerCircle({ numero, nom, edit, onNomChange }: {
           placeholder="Nom"
         />
       ) : (
-  nom && <span className="mt-0.5 text-white text-sm font-semibold whitespace-nowrap max-w-[8rem] overflow-hidden text-ellipsis">{nom}</span>
+        nom && <span className="mt-0.5 text-white text-sm font-semibold whitespace-nowrap max-w-[8rem] overflow-hidden text-ellipsis">{nom}</span>
       )}
     </div>
   );
