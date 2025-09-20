@@ -6,10 +6,13 @@ import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useMatchStore } from '@/lib/store';
 import { Player, Team } from '@/lib/types';
+// Patch useMatchStore type to match new addPlayer signature
+type AddPlayerFn = (player: Player, team: 'home' | 'away') => void;
 import { UserPlus, Trash2, Users } from 'lucide-react';
 
 export function PlayerManager() {
-  const { match, addPlayer, deletePlayer } = useMatchStore();
+  const { match, deletePlayer } = useMatchStore();
+  const addPlayer = useMatchStore((state) => state.addPlayer as AddPlayerFn);
   const [showAddPlayer, setShowAddPlayer] = useState(false);
   const [newPlayer, setNewPlayer] = useState({
     name: '',
@@ -25,14 +28,12 @@ export function PlayerManager() {
     }
 
     const player: Player = {
-      id: Date.now().toString(),
-      name: newPlayer.name,
-      number: parseInt(newPlayer.number),
-      position: newPlayer.position,
-      team: newPlayer.team,
+      numero: parseInt(newPlayer.number),
+      poste: newPlayer.position,
+      nom: newPlayer.name,
     };
 
-    addPlayer(player);
+  addPlayer(player, newPlayer.team);
     setNewPlayer({
       name: '',
       number: '',
@@ -126,24 +127,24 @@ export function PlayerManager() {
               ) : (
                 match.homePlayers.map((player) => (
                   <div
-                    key={player.id}
+                    key={player.numero}
                     className="flex items-center justify-between p-2 rounded hover:bg-secondary/50"
                   >
                     <div className="flex items-center gap-2">
                       <span className="font-bold text-sm w-6">
-                        {player.number}
+                        {player.numero}
                       </span>
                       <div>
-                        <div className="text-sm font-medium">{player.name}</div>
-                        {player.position && (
+                        <div className="text-sm font-medium">{player.nom}</div>
+                        {player.poste && (
                           <div className="text-xs text-muted-foreground">
-                            {player.position}
+                            {player.poste}
                           </div>
                         )}
                       </div>
                     </div>
                     <Button
-                      onClick={() => deletePlayer(player.id)}
+                      onClick={() => deletePlayer(player.numero)}
                       variant="ghost"
                       size="sm"
                       className="h-6 w-6 p-0"
@@ -166,24 +167,24 @@ export function PlayerManager() {
               ) : (
                 match.awayPlayers.map((player) => (
                   <div
-                    key={player.id}
+                    key={player.numero}
                     className="flex items-center justify-between p-2 rounded hover:bg-secondary/50"
                   >
                     <div className="flex items-center gap-2">
                       <span className="font-bold text-sm w-6">
-                        {player.number}
+                        {player.numero}
                       </span>
                       <div>
-                        <div className="text-sm font-medium">{player.name}</div>
-                        {player.position && (
+                        <div className="text-sm font-medium">{player.nom}</div>
+                        {player.poste && (
                           <div className="text-xs text-muted-foreground">
-                            {player.position}
+                            {player.poste}
                           </div>
                         )}
                       </div>
                     </div>
                     <Button
-                      onClick={() => deletePlayer(player.id)}
+                      onClick={() => deletePlayer(player.numero)}
                       variant="ghost"
                       size="sm"
                       className="h-6 w-6 p-0"

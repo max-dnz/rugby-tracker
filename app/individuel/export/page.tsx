@@ -1,7 +1,7 @@
 "use client";
 import { StatsJoueursList } from '@/components/match/StatsJoueursList';
 import type { Player } from '@/lib/types';
-import { useSearchParams } from 'next/navigation';
+
 import React from 'react';
 
 export default function ExportIndividuelPage() {

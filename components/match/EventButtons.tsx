@@ -5,7 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import { Button } from '@/components/ui/button';
 import { useMatchStore } from '@/lib/store';
 import { eventCategories } from '@/lib/event-categories';
-import { EventType, Team, MatchEvent } from '@/lib/types';
+import { EventType, MatchEvent } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { Player } from '@/lib/types';
 
@@ -123,14 +123,14 @@ export function EventButtonsIndividuel() {
           let filteredEvents = category.events;
           if (category.name === 'Attaque') {
             filteredEvents = filteredEvents.filter(e => !['kick', 'lost_ruck', 'lost_ball'].includes(e.type));
-            let rest = filteredEvents.filter(e => !['try', 'line_break'].includes(e.type));
+            const rest = filteredEvents.filter(e => !['try', 'line_break'].includes(e.type));
             filteredEvents = [
-              { type: 'soutien_positif', label: 'Soutien positif' },
-              { type: 'soutien_negatif', label: 'Soutien négatif' },
-              { type: 'line_break', label: 'Franchissement' },
-              { type: 'try', label: 'Essai', points: 5 },
+              { type: 'soutien_positif', label: 'Soutien positif', color: 'bg-yellow-400' },
+              { type: 'soutien_negatif', label: 'Soutien négatif', color: 'bg-red-400' },
+              { type: 'line_break', label: 'Franchissement', color: 'bg-cyan-500' },
+              { type: 'try', label: 'Essai', points: 5, color: 'bg-green-500' },
               ...rest
-            ] as any[];
+            ];
           }
           if (category.name === 'Fautes') {
             filteredEvents = filteredEvents.filter(e => e.type !== 'penalty_conceded');

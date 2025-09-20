@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useMatchStore } from '@/lib/store';
 import { EventType } from '@/lib/types';
-import { Play, Pause, RotateCcw, Flag } from 'lucide-react';
+import { Play, Pause, Flag } from 'lucide-react';
 
 export function MatchTimer() {
   const { match, startMatch, pauseMatch, resumeMatch, updateMatchTime, setHalf, endMatch, addEvent } = useMatchStore();

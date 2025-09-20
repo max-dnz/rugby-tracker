@@ -4,10 +4,10 @@ import { MatchTimer } from '@/components/match/MatchTimer';
 import React, { useState, useEffect } from 'react';
 import type { Player } from '@/lib/types';
 import { useMatchStore } from '@/lib/store';
-import { RefreshCw, Share2, Copy } from 'lucide-react';
+import { RefreshCw, Share2 } from 'lucide-react';
 import * as LZString from 'lz-string';
 // Pour l'URL export courte
-function encodeExportData(titulaires: any[], remplacants: any[]) {
+function encodeExportData(titulaires: Player[], remplacants: Player[]) {
   const data = JSON.stringify({ t: titulaires, r: remplacants });
   if (typeof window !== 'undefined') {
     // LZ-string compresse puis encode en base64 (URL safe)
@@ -22,7 +22,7 @@ import { EventsList } from '@/components/match/EventsList';
 
 
 export default function IndividuelPage() {
-  const [copied, setCopied] = useState(false);
+  // const [copied, setCopied] = useState(false); // unused
   const [showExportLink, setShowExportLink] = useState(false);
   const [shortUrl, setShortUrl] = useState<string|null>(null);
   const [loadingShort, setLoadingShort] = useState(false);

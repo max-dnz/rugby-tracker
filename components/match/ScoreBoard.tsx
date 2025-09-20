@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useMatchStore } from '@/lib/store';
 import { Edit2, Check, X } from 'lucide-react';
-import { eventCategories } from '@/lib/event-categories';
+
 
 export function ScoreBoard() {
   const { match, setMatch, setScore, addEvent } = useMatchStore();

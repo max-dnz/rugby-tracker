@@ -50,9 +50,13 @@ export function EventsList() {
               // Affiche numéro et nom du joueur si dispo, sinon nom équipe
               let playerLabel = '';
               if (event.player) {
-                playerLabel = `#${event.player.number}`;
-                if (event.player.name && event.player.name !== event.player.position && event.player.name !== `#${event.player.number}`) {
-                  playerLabel += ` - ${event.player.name}`;
+                playerLabel = `#${event.player.numero}`;
+                if (
+                  event.player.nom &&
+                  event.player.nom !== event.player.poste &&
+                  event.player.nom !== `#${event.player.numero}`
+                ) {
+                  playerLabel += ` - ${event.player.nom}`;
                 }
               }
               const teamName = playerLabel || (event.team === 'home' ? match.homeTeam : match.awayTeam);

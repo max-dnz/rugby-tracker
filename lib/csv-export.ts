@@ -12,7 +12,7 @@ export function exportMatchToCSV(match: Match) {
       .find(e => e.type === event.type);
     
     const teamName = event.team === 'home' ? match.homeTeam : match.awayTeam;
-    const playerInfo = event.player ? `${event.player.name} (#${event.player.number})` : '';
+  const playerInfo = event.player ? `${event.player.nom} (#${event.player.numero})` : '';
     
     const matchMinutes = Math.floor(event.matchTime / 60);
     const matchSeconds = event.matchTime % 60;

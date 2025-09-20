@@ -1,8 +1,5 @@
 import React, { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
-import { Button } from '../ui/button';
-import { useMatchStore } from '@/lib/store';
-import { PlayerStatsDialog } from '../ui/player-stats-dialog';
+
 
 const defaultTitulaires = [
   { numero: 1, poste: "Pilier gauche", nom: "" },
@@ -74,7 +71,7 @@ export function Composition(props: CompositionProps = {}) {
       <div className="flex items-center gap-4 mb-2">
         {/* Affiche le titre seulement si on n'est PAS dans l'onglet statistiques */}
         {props.edit !== false && (
-          <h2 className="text-xl font-bold">Composition de l'équipe</h2>
+          <h2 className="text-xl font-bold">Composition de l&apos;équipe</h2>
         )}
         {/* Bouton Modifier/Valider uniquement si pas de edit en props (onglet composition) */}
         {props.edit === undefined && (

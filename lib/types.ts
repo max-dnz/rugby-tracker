@@ -5,6 +5,8 @@ export interface Player {
 }
 export type EventType = 
   | "try"
+  | "soutien_positif"
+  | "soutien_negatif"
   | "conversion"
   | "penalty_goal"
   | "drop_goal"

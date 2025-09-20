@@ -15,9 +15,9 @@ interface MatchStore {
   endMatch: () => void;
   setHalf: (half: 1 | 2) => void;
   updateMatchTime: (time: number) => void;
-  addPlayer: (player: Player) => void;
-  updatePlayer: (playerId: string, player: Partial<Player>) => void;
-  deletePlayer: (playerId: string) => void;
+    addPlayer: (player: Player, team: 'home' | 'away') => void;
+  updatePlayer: (playerNumero: number, player: Partial<Player>) => void;
+  deletePlayer: (playerNumero: number) => void;
   resetMatch: () => void;
 }
 
@@ -132,36 +132,36 @@ export const useMatchStore = create<MatchStore>()(
           },
         })),
       
-      addPlayer: (player) =>
+      addPlayer: (player: Player, team: 'home' | 'away') =>
         set((state) => ({
           match: {
             ...state.match,
-            [player.team === 'home' ? 'homePlayers' : 'awayPlayers']: [
-              ...state.match[player.team === 'home' ? 'homePlayers' : 'awayPlayers'],
+            [team === 'home' ? 'homePlayers' : 'awayPlayers']: [
+              ...state.match[team === 'home' ? 'homePlayers' : 'awayPlayers'],
               player,
             ],
           },
         })),
       
-      updatePlayer: (playerId, playerData) =>
+      updatePlayer: (playerNumero, playerData) =>
         set((state) => ({
           match: {
             ...state.match,
             homePlayers: state.match.homePlayers.map((p) =>
-              p.id === playerId ? { ...p, ...playerData } : p
+              p.numero === playerNumero ? { ...p, ...playerData } : p
             ),
             awayPlayers: state.match.awayPlayers.map((p) =>
-              p.id === playerId ? { ...p, ...playerData } : p
+              p.numero === playerNumero ? { ...p, ...playerData } : p
             ),
           },
         })),
-      
-      deletePlayer: (playerId) =>
+
+      deletePlayer: (playerNumero) =>
         set((state) => ({
           match: {
             ...state.match,
-            homePlayers: state.match.homePlayers.filter((p) => p.id !== playerId),
-            awayPlayers: state.match.awayPlayers.filter((p) => p.id !== playerId),
+            homePlayers: state.match.homePlayers.filter((p) => p.numero !== playerNumero),
+            awayPlayers: state.match.awayPlayers.filter((p) => p.numero !== playerNumero),
           },
         })),
       
