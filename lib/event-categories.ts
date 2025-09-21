@@ -4,8 +4,8 @@ export const eventCategories: EventCategory[] = [
   {
     name: "Défense",
     events: [
-      { type: "tackle_success", label: "Plaquage réussi", color: "bg-green-500" },
-      { type: "tackle_miss", label: "Plaquage raté", color: "bg-red-500" },
+  { type: "tackle_success", label: "Plaquage réussi", color: "bg-green-500" },
+  { type: "tackle_miss", label: "Plaquage raté", color: "bg-red-500" },
   { type: "turnover", label: "Ballon gratté", color: "bg-emerald-500" },
     ],
   },

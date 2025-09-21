@@ -120,17 +120,15 @@ export function EventButtonsIndividuel() {
       <div className="space-y-6">
         {eventCategories.map((category) => {
           if (category.name === 'Points') return null;
-          if (category.name === 'Zone de marque' || category.name === 'Phases de jeu') return null;
+          if (category.name === 'Zone de marque' || category.name === 'Phases de jeu' || category.name === 'Cartons') return null;
           let filteredEvents = category.events;
           if (category.name === 'Attaque') {
-            filteredEvents = filteredEvents.filter(e => !['kick', 'lost_ruck', 'lost_ball'].includes(e.type));
-            const rest = filteredEvents.filter(e => !['try', 'line_break'].includes(e.type));
+            // Retirer franchissement (line_break), essai (try) et ballon gratté (turnover)
+            filteredEvents = filteredEvents.filter(e => !['kick', 'lost_ruck', 'lost_ball', 'line_break', 'try', 'turnover'].includes(e.type));
             filteredEvents = [
               { type: 'soutien_positif', label: 'Soutien positif', color: 'bg-yellow-400' },
               { type: 'soutien_negatif', label: 'Soutien négatif', color: 'bg-red-400' },
-              { type: 'line_break', label: 'Franchissement', color: 'bg-cyan-500' },
-              { type: 'try', label: 'Essai', points: 5, color: 'bg-green-500' },
-              ...rest
+              ...filteredEvents
             ];
           }
           if (category.name === 'Fautes') {

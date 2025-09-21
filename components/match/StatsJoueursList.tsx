@@ -32,12 +32,7 @@ export function StatsJoueursList({ titulaires, remplacants }: { titulaires: Play
   const totalSoutiens = nbSoutiensPositifs + nbSoutiensNegatifs;
   const pctSoutiens = totalSoutiens > 0 ? Math.round((nbSoutiensPositifs / totalSoutiens) * 100) : null;
 
-  // Ballons grattés : turnover
-  const nbBallonsGrattes = statsMap['turnover'] || 0;
 
-  // Franchissements, essais
-  const nbFranchissements = statsMap['line_break'] || 0;
-  const nbEssais = statsMap['try'] || 0;
 
   // En-avants : knock_on
   const nbEnAvants = statsMap['knock_on'] || 0;
@@ -71,22 +66,13 @@ export function StatsJoueursList({ titulaires, remplacants }: { titulaires: Play
               <span>% Plaquages réussis</span>
               <span className="font-bold">{totalPlaquages > 0 ? `${pctPlaquages}% (${nbPlaquagesReussis}/${totalPlaquages})` : '0% (0/0)'}</span>
             </div>
-            <div className="flex justify-between">
-              <span>Ballons grattés</span>
-              <span className="font-bold">{nbBallonsGrattes}</span>
-            </div>
+            {/* Ballons grattés retiré */}
             <div className="flex justify-between">
               <span>Efficacité au soutien</span>
               <span className="font-bold">{totalSoutiens > 0 ? `${pctSoutiens}% (${nbSoutiensPositifs}/${totalSoutiens})` : '0% (0/0)'}</span>
             </div>
-            <div className="flex justify-between">
-              <span>Franchissements</span>
-              <span className="font-bold">{nbFranchissements}</span>
-            </div>
-            <div className="flex justify-between">
-              <span>Essais</span>
-              <span className="font-bold">{nbEssais}</span>
-            </div>
+            {/* Franchissements retiré */}
+            {/* Essais retiré */}
             <div className="flex justify-between">
               <span>En-avants</span>
               <span className="font-bold">{nbEnAvants}</span>

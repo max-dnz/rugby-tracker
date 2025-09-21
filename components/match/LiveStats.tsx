@@ -109,8 +109,6 @@ export function LiveStats() {
             <>
               <span className="font-semibold">Efficacité 22m :</span> {percent}%
               <span className="pl-2 text-sm text-muted-foreground">({points} / {lost})</span>
-              <br />
-              <span className="font-semibold">Moyenne phases de jeu entre entrées 22m :</span> {avgPhasePlay.toFixed(2)}
             </>
           );
         })()}

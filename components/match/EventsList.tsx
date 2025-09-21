@@ -70,21 +70,13 @@ export function EventsList() {
                     <div className="text-xs sm:text-sm font-mono text-muted-foreground">
                       {formatMatchTime(event.matchTime)}
                     </div>
-                    {eventDetails && (
-                      <div
-                        className={cn(
-                          "w-2 h-2 rounded-full flex-shrink-0",
-                          eventDetails.color
-                        )}
-                      />
-                    )}
+                    {/* pastille colorée retirée */}
                     <div className="min-w-0 flex-1">
                       <div className="font-medium text-sm sm:text-base truncate">
                         {eventDetails?.label || event.type}
                       </div>
                       <div className="text-xs sm:text-sm text-muted-foreground truncate">
                         {teamName}
-                        {event.points && event.type !== 'try' && ` (+${event.points} pts)`}
                       </div>
                     </div>
                   </div>
