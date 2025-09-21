@@ -21,10 +21,9 @@ export const eventCategories: EventCategory[] = [
   {
     name: "Zone de marque",
     events: [
-      { type: "entry_22", label: "Entrée dans les 22", color: "bg-blue-300" },
-      { type: "phase_play", label: "Phase de jeu", color: "bg-indigo-400" },
-      { type: "zone_points", label: "Points marqués", color: "bg-green-400" },
-      { type: "zone_lost_ball", label: "Ballon perdu", color: "bg-red-400" },
+  { type: "entry_22", label: "Entrée dans les 22", color: "bg-blue-300" },
+  { type: "zone_points", label: "Points marqués", color: "bg-green-400" },
+  { type: "zone_lost_ball", label: "Ballon perdu", color: "bg-red-400" },
     ],
   },
   {

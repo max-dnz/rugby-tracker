@@ -20,6 +20,7 @@ export function EventButtons() {
       timestamp: new Date().toISOString(),
       matchTime: match.currentTime,
       points,
+      team: 'home',
     };
 
     addEvent(event);
