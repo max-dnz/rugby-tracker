@@ -12,20 +12,12 @@ export const eventCategories: EventCategory[] = [
   {
     name: "Attaque",
     events: [
-      { type: "line_break", label: "Franchissement", color: "bg-cyan-500" },
-      { type: "kick", label: "Jeu au pied", color: "bg-blue-400" },
-      { type: "lost_ruck", label: "Ruck perdu", color: "bg-red-400" },
-      { type: "lost_ball", label: "Ballon perdu", color: "bg-orange-400" },
+  { type: "line_break", label: "Franchissement", color: "bg-cyan-500" },
+  { type: "lost_ruck", label: "Ruck perdu", color: "bg-red-400" },
+  { type: "lost_ball", label: "Ballon perdu", color: "bg-orange-400" },
     ],
   },
-  {
-    name: "Zone de marque",
-    events: [
-  { type: "entry_22", label: "Entrée dans les 22", color: "bg-blue-300" },
-  { type: "zone_points", label: "Points marqués", color: "bg-green-400" },
-  { type: "zone_lost_ball", label: "Ballon perdu", color: "bg-red-400" },
-    ],
-  },
+
   {
     name: "Fautes",
     events: [
@@ -39,9 +31,10 @@ export const eventCategories: EventCategory[] = [
   {
     name: "Phases de jeu",
     events: [
-      { type: "lineout_won", label: "Touche gagnée", color: "bg-green-500" },
-      { type: "lineout_lost", label: "Touche perdue", color: "bg-red-500" },
-  { type: "kick_miss", label: "Coup de pied raté", color: "bg-gray-500" },
+    { type: "lineout_won", label: "Touche gagnée", color: "bg-green-500" },
+    { type: "lineout_lost", label: "Touche perdue", color: "bg-red-500" },
+    { type: "kick_success", label: "Pénalité Réussie", color: "bg-green-400" },
+    { type: "kick_miss", label: "Pénaltouche Ratée", color: "bg-gray-500" },
     ],
   },
   {

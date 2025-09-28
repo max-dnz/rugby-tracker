@@ -70,49 +70,9 @@ export function LiveStats() {
       <div>
         <span className="font-semibold">Franchissements :</span> {match.events.filter(e => e.type === 'line_break' && e.team === 'home').length}
       </div>
-      {/* Jeu au pied */}
-      <div>
-        <span className="font-semibold">Jeu au pied :</span> {match.events.filter(e => e.type === 'kick' && e.team === 'home').length}
-      </div>
 
-      {/* Statistiques Zone de marque */}
-      <div className="mt-2">
-        <span className="font-semibold">Entrées dans les 22 :</span> {match.events.filter(e => e.type === 'entry_22' && e.team === 'home').length}
-      </div>
-      <div>
-        {(() => {
-          const entries = match.events.filter(e => e.type === 'entry_22' && e.team === 'home').length;
-          const points = match.events.filter(e => e.type === 'zone_points' && e.team === 'home').length;
-          const lost = match.events.filter(e => e.type === 'zone_lost_ball' && e.team === 'home').length;
-          const percent = entries > 0 ? Math.round((points / entries) * 100) : 0;
-          // Calcul moyenne phase de jeu entre entrées dans les 22
-          const events = match.events.filter(e => e.team === 'home');
-          const entryIndexes: number[] = [];
-          events.forEach((e, i) => {
-            if (e.type === 'entry_22') entryIndexes.push(i);
-          });
-          const phaseCounts: number[] = [];
-          for (let i = 0; i < entryIndexes.length - 1; i++) {
-            const start = entryIndexes[i];
-            const end = entryIndexes[i + 1];
-            const phases = events.slice(start + 1, end).filter(e => e.type === 'phase_play').length;
-            phaseCounts.push(phases);
-          }
-          // Après la dernière entrée jusqu'à la fin du match
-          if (entryIndexes.length > 0) {
-            const lastEntry = entryIndexes[entryIndexes.length - 1];
-            const phases = events.slice(lastEntry + 1).filter(e => e.type === 'phase_play').length;
-            phaseCounts.push(phases);
-          }
-          const avgPhasePlay = phaseCounts.length > 0 ? (phaseCounts.reduce((a, b) => a + b, 0) / phaseCounts.length) : 0;
-          return (
-            <>
-              <span className="font-semibold">Efficacité 22m :</span> {percent}%
-              <span className="pl-2 text-sm text-muted-foreground">({points} / {lost})</span>
-            </>
-          );
-        })()}
-      </div>
+
+
       {/* Pénalités */}
       <div className="mt-2">
         <span className="font-semibold">Pénalités :</span> {penalties}
@@ -152,13 +112,25 @@ export function LiveStats() {
           );
         })()}
       </div>
+      {/* Statistiques pénaltouche */}
+      <div className="mt-4">
+        {(() => {
+          const penaltoucheReussie = match.events.filter(e => e.type === 'kick_success' && e.team === 'home').length;
+          const penaltoucheRatee = match.events.filter(e => e.type === 'kick_miss' && e.team === 'home').length;
+          const totalPenaltouche = penaltoucheReussie + penaltoucheRatee;
+          const pctPenaltouche = totalPenaltouche > 0 ? Math.round((penaltoucheReussie / totalPenaltouche) * 100) : 0;
+          return (
+            <>
+              <span className="font-semibold">% Réussite Pénaltouche :</span> {pctPenaltouche}%
+              <span className="pl-2 text-sm text-muted-foreground">({penaltoucheReussie} réussies / {totalPenaltouche} tentées)</span>
+            </>
+          );
+        })()}
+      </div>
       {/* Statistiques pied tout en bas pour chaque équipe */}
       <div className="mt-4">
         <span className="font-semibold">% Réussite Pied ROC HC :</span> {homeKickStats.kickSuccessPct}%
         <span className="pl-2 text-sm text-muted-foreground">({homeKickStats.totalSuccessfulKicks} réussis / {homeKickStats.totalKicks} tentés)</span>
-      </div>
-      <div>
-        <span className="font-semibold">Coups de pied manqués ROC HC :</span> {homeKickStats.kickMisses}
       </div>
       <div className="mt-4">
         <span className="font-semibold">% Réussite Pied Adversaire :</span> {awayKickStats.kickSuccessPct}%

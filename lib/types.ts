@@ -46,7 +46,8 @@ export type EventType =
   | "entry_22"
   | "zone_points"
   | "zone_lost_ball"
-  | "phase_play";
+  | "phase_play"
+  | "kick_success";
 
 export type Team = "home" | "away";
 
